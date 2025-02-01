@@ -7,7 +7,7 @@ const { validationResult } = require('express-validator');
 
 const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "7d" 
+    expiresIn: process.env.JWT_EXPIRES_IN 
   });
 };
 
@@ -36,7 +36,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   }
   const user = await authService.createUser({name, email, password});
 
-  const verificationToken = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '10minutes' });
+  const verificationToken = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_VERIFICATION_TOKEN_EXPIRES_IN });
   const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
   const emailContent = `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`;
   // send link with verification token in query param to user email
