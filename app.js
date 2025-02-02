@@ -35,7 +35,26 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP, please try again in an hour!'
 });
 
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"], 
+        scriptSrc: ["'self'"], 
+        styleSrc: ["'self'"], 
+        connectSrc: ["'self'"], 
+        objectSrc: ["'none'"], 
+        frameSrc: ["'none'"], 
+        formAction: ["'self'"],
+      },
+    },
+    frameguard: { action: "deny" },
+    xssFilter: false,
+    noSniff: true,
+    hidePoweredBy: true, 
+  })
+);
+
 app.use(limiter);
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
