@@ -5,7 +5,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const hpp = require('hpp');
 // const cors = require('cors');
-
+const xss = require('xss-clean');
 const globalErrorHandler = require('./controllers/errorController');
 const userRouter = require('./routes/userRoutes');
 
@@ -40,7 +40,7 @@ app.use(limiter);
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(hpp());
-
+app.use(xss());
 app.use('/users', userRouter);
 
 app.all('*', (req, res, next) => {
